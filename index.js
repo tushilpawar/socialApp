@@ -2,7 +2,13 @@ const express = require('express')
 const app = express()
 const format = require('date-format')
 
-const PORT = 3000 || process.env.PORT;
+//swagger docs
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const PORT = process.env.PORT || 3000;
 
 app.get("/",(req,res)=>{
     res.status(200).send("Hello WOrld")
