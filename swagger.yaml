@@ -1,0 +1,322 @@
+openapi: 3.0.0
+info:
+  title : Socail App
+  description: Our first offical docs at LCO
+  verison : 1.0.1
+
+# servers:
+# - url: http://localhost:3000/api/v1
+#   description: localhost verison of app
+# - url: http://localhost:3000/api/v1
+#   description: this is just a dumy api url, it doesn't work
+
+servers:
+- url: "{protocal}://localhost:3000/api/{version}"
+  description: localhost verison of app
+  variables:
+    version :
+      enum:
+        - v1
+        - v2
+      default : v1
+    protocal :
+      enum:
+        - http
+        - https
+      default : http
+    
+
+
+# components:
+#   securitySchemes:
+#     BasicAuth:
+#       type: http
+#       scheme: basic
+#     BearerAuth:
+#       type: http
+#       scheme: bearer
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name : token
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /dev:
+    get:
+      tags:
+        - String 
+      summary: return a greet msg from dev
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+             schema:
+              type: string
+              example : "mystring"
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+
+  # //return object
+  /devobject:
+    get:
+      tags:
+        - String 
+      summary: return a greet object from dev
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+  
+  # // return array
+  /courses:
+    get:
+      tags:
+        - String 
+      summary: return all courses
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: 
+                  properties:
+                    id: 
+                      type: string
+                    name:
+                      type: string
+                    price:
+                      type: number
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+# add course by request body
+  /addCourse:
+    post:
+      tags:
+        - String 
+      summary: add new course to existing course
+      consumes:
+        - application/json
+      produces:
+        - appplication/json
+      requestBody:
+        required: true
+        content :
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: 
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: number
+
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: boolean
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+
+#  get detail by query
+  /coursequery:
+    get:
+      tags:
+        - String 
+      summary: trying to learn abour query
+      parameters:
+        - name: location
+          in: query
+          required: true
+          schema:
+            type: string
+            enum : [delhi, london ,jaipur]
+        - name: device
+          in: query
+          required: true
+          schema:
+            type: string
+            enum : [web, mobile ]   
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    type: string
+                  device:
+                    type: string
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+
+# upload image
+  /courseupload:
+    post:
+      tags:
+        - String 
+      summary: uploading images
+      requestBody:
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: boolean
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+
+
+# // from params
+  /mycourse/{courseId}:
+    get:
+      tags:
+        - String 
+      summary: return course by request courseId
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          default: 11
+          schema:
+            type: string
+      responses :
+        200:
+          description: All good success
+          content :
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400 :
+         description: Bad Request
+        500 :
+         description : Internal server Error 
+
+
+  # /instagram:
+  #   get:
+  #     summary : return username, followers and follows
+  #     responses : 
+  #       '200': # status code
+  #         description : return an object
+  #         content :
+  #           application/json:
+  #             schema :
+  #               type: object
+  #               properties:
+  #                 username: 
+  #                   type: string
+  #                 followers:
+  #                   type : string
+  #                 follows:
+  #                   type : string
+  #   post:
+  #     summary : return username, followers and follows
+  #     responses : 
+  #       '200': # status code
+  #         description : return an object
+  #         content :
+  #           application/json:
+  #             schema :
+  #               type: object
+  #               properties:
+  #                 username: 
+  #                   type: string
+  #                 followers:
+  #                   type : string
+  #                 follows:
+  #                   type : string
+                  
+  # /{token}:
+  #   get:
+  #     summary : return whatever is there in the parameter
+  #     parameters:
+  #       - name: token
+  #         default : 5
+  #         in: path 
+  #     responses : 
+  #       '200': # status code
+  #         description : return an object
+  #         content :
+  #           application/json:
+  #             schema :
+  #               type: object
+  #               properties:
+  #                 params: 
+  #                   type: string
+                 
+  #   post:
+  #     summary : return username, followers and follows
+  #     responses : 
+  #       '200': # status code
+  #         description : return an object
+  #         content :
+  #           application/json:
+  #             schema :
+  #               type: object
+  #               properties:
+  #                 username: 
+  #                   type: string
+  #                 followers:
+  #                   type : string
+  #                 follows:
+  #                   type : string
+                  
+
